@@ -16,7 +16,7 @@ const apiUrl = process.env.ISSUER_NODE_URL;
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
 const issuerDid =
-  "did:polygonid:polygon:mumbai:2qPHzNFJBcpXvobxHphC1jP67BwsSC7PMUsKpXFdvA";
+  "did:polygonid:polygon:mumbai:2qLMGGZo1iJZWQ2fzRw8dtL8XeBmAE47f3ggbXsyJf";
 
 // Base64 encoding for the credentials
 const encodedCredentials = Buffer.from(`${username}:${password}`).toString(
@@ -258,5 +258,6 @@ async function getVC(req, res) {
   } catch (error) {
     console.log(error.message);
     console.log(error);
+    // console.log(error);
   }
 }

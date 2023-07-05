@@ -8,15 +8,9 @@ const {
 const ageReason = "Age Must be less than 50yrs";
 
 const credentialSubject = {
-  //   lastYearSalaryINR: {
-  //     $gt: 700000,
-  //   },
   age: {
     $lt: 50,
   },
-  // experience: {
-  //   $gt: 2,
-  // },
 };
 
 const ageRequest = BankLoanVerificationCredential(credentialSubject);
