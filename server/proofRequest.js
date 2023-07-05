@@ -1,19 +1,25 @@
-const { KYCAgeCredential } = require("./vcHelpers/KYCAgeCredential");
+const {
+  BankLoanVerificationCredential,
+} = require("./vcHelpers/BankLoanVerificationCredential.js");
 
 // design your own customised authentication requirement here using Query Language
 // https://0xpolygonid.github.io/tutorials/verifier/verification-library/zk-query-language/
 
-const humanReadableAuthReason = "Must be born before this year";
+const humanReadableAuthReason = "Salary must be greater than 7Lakhs";
 
 const credentialSubject = {
-  birthday: {
-    // users must be born before this year
-    // birthday is less than Jan 1, 2023
-    $lt: 20230101,
+  lastYearSalaryINR: {
+    $gt: 700000,
   },
+  // age: {
+  //   $gt: 20,
+  // },
+  // experience: {
+  //   $gt: 2,
+  // },
 };
 
-const proofRequest = KYCAgeCredential(credentialSubject);
+const proofRequest = BankLoanVerificationCredential(credentialSubject);
 
 module.exports = {
   humanReadableAuthReason,

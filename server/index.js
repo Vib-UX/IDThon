@@ -4,11 +4,36 @@ const getRawBody = require("raw-body");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const { humanReadableAuthReason, proofRequest } = require("./proofRequest");
-
+const axios = require("axios");
 require("dotenv").config();
+const moment = require("moment");
+const bodyParser = require("body-parser");
+
+// Endpoint URL and credentials for basic authentication to connect with ISSUER Node
+const apiUrl = "http://localhost:3001";
+const username = process.env.USERNAME;
+const password = process.env.PASSWORD;
+const issuerDid =
+  "did:polygonid:polygon:mumbai:2qPHzNFJBcpXvobxHphC1jP67BwsSC7PMUsKpXFdvA";
+
+// Base64 encoding for the credentials
+const encodedCredentials = Buffer.from(`${username}:${password}`).toString(
+  "base64"
+);
+
+// Request configuration
+const config = {
+  headers: {
+    Authorization: `Basic ${encodedCredentials}`,
+    "Content-Type": "application/json",
+  },
+};
 
 const app = express();
 const port = 8080;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   cors({
@@ -48,6 +73,10 @@ app.get(apiPath.getAuthQr, (req, res) => {
 
 app.post(apiPath.handleVerification, (req, res) => {
   handleVerification(req, res);
+});
+
+app.post("/api/get-vc", async (req, res) => {
+  return await getVC(req, res);
 });
 
 const STATUS = {
@@ -158,5 +187,65 @@ async function handleVerification(req, res) {
       socketMessage("handleVerification", STATUS.ERROR, error)
     );
     return res.status(500).send(error);
+  }
+}
+
+async function getVC(req, res) {
+  try {
+    console.log(req.body);
+    const { id, age, experience, lastYearSalaryINR } = req.body;
+    console.log(username, password);
+    // Request BODY to Issue BankLoanCredential
+    const claimReq = {
+      credentialSchema:
+        "https://raw.githubusercontent.com/Vib-UX/IDThon/main/schemas/json/bank-loan-credential-v1.json",
+      type: "BankLoanVerificationCredential",
+      credentialSubject: {
+        id,
+        age,
+        experience,
+        lastUpdated: moment.utc().toDate(),
+        lastYearSalaryINR,
+      },
+      expiration: 1903357766,
+    };
+
+    // Sending a POST request to issue vc
+    const VC = await axios.post(
+      `${apiUrl}/v1/${issuerDid}/claims`,
+      claimReq,
+      config
+    );
+    if (!VC.data.id) {
+      return res.status(404).json({
+        error: VC,
+      });
+    }
+
+    console.log(VC.data);
+
+    // Get Claims QR Code json
+    const jsonQrCode = await axios.get(
+      `${apiUrl}/v1/${issuerDid}/claims/${VC.data.id}/qrcode`,
+      config
+    );
+
+    // Publish Identity state to the BC
+    const publish = await axios.post(
+      `${apiUrl}/v1/${issuerDid}/state/publish`,
+      {},
+      config
+    );
+
+    if (!publish.data.txID) {
+      this.response.status(404).json({
+        error: publish,
+      });
+    }
+
+    return res.status(200).json(jsonQrCode.data);
+  } catch (error) {
+    // console.log(error.message);
+    console.log(error);
   }
 }
