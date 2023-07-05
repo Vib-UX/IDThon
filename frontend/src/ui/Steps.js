@@ -8,6 +8,9 @@ import Typography from "@mui/material/Typography";
 import AgeVerifier from "./AgeVerifier";
 import SalaryVerifier from "./SalaryVerifier";
 import ExperienceVerifier from "./ExperienceVerifier";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
+import { TextField } from "@mui/material";
 
 const steps = [
   "Verfiy your age",
@@ -17,7 +20,13 @@ const steps = [
 
 export default function HorizontalLinearStepper({ setIsVerified }) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const { width, height } = useWindowSize();
   const [skipped, setSkipped] = React.useState(new Set());
+  const [txState, setTxState] = React.useState({
+    isAgeVerified: false,
+    isExperienceVerified: false,
+    isSalaryVerified: false,
+  });
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -74,6 +83,10 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
         width: "100%",
       }}
     >
+      {activeStep === steps.length && (
+        <Confetti width={width} height={height} />
+      )}
+
       <Stepper
         activeStep={activeStep}
         style={{
@@ -117,18 +130,71 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
       </Stepper>
       {activeStep === steps.length ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
+          <div
+            style={{
+              height: "400px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h1
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              🎉You have are now eligible for the requested loan amount
+            </h1>
+            <div
+              style={{
+                height: "20px",
+              }}
+            />
+            <div>Enter your account number</div>
+            <TextField
+              id="outlined-number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#8d2cab",
+                marginTop: "20px",
+                fontWeight: "normal",
+                color: "#fff",
+              }}
+              onClick={() => {
+                setIsVerified(false);
+              }}
+            >
+              Go back
+            </Button>
+          </div>
         </React.Fragment>
       ) : (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            {activeStep === 0 && <AgeVerifier setIsVerified={setIsVerified} />}
+            {activeStep === 0 && (
+              <AgeVerifier
+                publicServerURL={
+                  process.env.REACT_APP_VERIFICATION_SERVER_PUBLIC_URL
+                }
+                localServerURL={
+                  process.env.REACT_APP_VERIFICATION_SERVER_LOCAL_HOST_URL
+                }
+                credentialType={"KYCAgeCredential"}
+                issuerOrHowToLink={
+                  "https://oceans404.notion.site/How-to-get-a-Verifiable-Credential-f3d34e7c98ec4147b6b2fae79066c4f6?pvs=4"
+                }
+                onVerificationResult={() => {
+                  localStorage.setItem("isAgeVerified", true);
+                  handleNext();
+                }}
+              />
+            )}
             {activeStep === 1 && (
               <ExperienceVerifier
                 publicServerURL={
@@ -141,7 +207,10 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
                 issuerOrHowToLink={
                   "https://oceans404.notion.site/How-to-get-a-Verifiable-Credential-f3d34e7c98ec4147b6b2fae79066c4f6?pvs=4"
                 }
-                onVerificationResult={setIsVerified}
+                onVerificationResult={() => {
+                  localStorage.setItem("isExperienceVerified", true);
+                  handleNext();
+                }}
               />
             )}
             {activeStep === 2 && (
@@ -156,11 +225,14 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
                 issuerOrHowToLink={
                   "https://oceans404.notion.site/How-to-get-a-Verifiable-Credential-f3d34e7c98ec4147b6b2fae79066c4f6?pvs=4"
                 }
-                onVerificationResult={setIsVerified}
+                onVerificationResult={() => {
+                  localStorage.setItem("isSalaryVerified", true);
+                  handleNext();
+                }}
               />
             )}
           </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
               disabled={activeStep === 0}
@@ -169,14 +241,9 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
             >
               Back
             </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
             <Button
               variant="contained"
+              disabled={!txState.isAgeVerified}
               style={{
                 fontWeight: "normal",
                 backgroundColor: "#8d2cab",
@@ -186,7 +253,7 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
             >
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
-          </Box>
+          </Box> */}
         </React.Fragment>
       )}
     </Box>

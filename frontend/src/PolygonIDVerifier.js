@@ -132,6 +132,7 @@ function PolygonIDVerifier({
                   justifyContent: "center",
                   flexDirection: "column",
                   gap: 10,
+                  height: "300px",
                   alignItems: "center",
                 }}
               >
@@ -146,6 +147,7 @@ function PolygonIDVerifier({
                   justifyContent: "center",
                   flexDirection: "column",
                   gap: 10,
+                  height: "300px",
                   alignItems: "center",
                 }}
               >

@@ -26,31 +26,51 @@ export default function CheckboxList() {
 
   return (
     <List sx={{ width: "100%", maxWidth: 360 }}>
-      {[0, 1, 2, 3].map((value) => {
-        const labelId = `checkbox-list-label-${value}`;
-
-        return (
-          <ListItem key={value} disablePadding>
-            <ListItemButton
-              role={undefined}
-              onClick={handleToggle(value)}
-              dense
-            >
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  style={{ color: "#fff" }}
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
+      <ListItem isablePadding>
+        <ListItemButton role={undefined} dense>
+          <ListItemIcon>
+            <Checkbox
+              edge="start"
+              tabIndex={-1}
+              checked={localStorage.getItem("isAgeVerified") === "true"}
+              disableRipple
+              style={{ color: "#7fff00" }}
+              inputProps={{ "aria-labelledby": "age" }}
+            />
+          </ListItemIcon>
+          <ListItemText id={1} primary="Verify your age" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem isablePadding>
+        <ListItemButton role={undefined} dense>
+          <ListItemIcon>
+            <Checkbox
+              edge="start"
+              tabIndex={-1}
+              checked={localStorage.getItem("isAgeVerified") === "true"}
+              disableRipple
+              style={{ color: "#7fff00" }}
+              inputProps={{ "aria-labelledby": "experience" }}
+            />
+          </ListItemIcon>
+          <ListItemText id={1} primary="Verify your experience" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem isablePadding>
+        <ListItemButton role={undefined} dense>
+          <ListItemIcon>
+            <Checkbox
+              edge="start"
+              tabIndex={-1}
+              checked={localStorage.getItem("isSalaryVerified") === "true"}
+              disableRipple
+              style={{ color: "#7fff00" }}
+              inputProps={{ "aria-labelledby": "salary" }}
+            />
+          </ListItemIcon>
+          <ListItemText id={1} primary="Verify your salary" />
+        </ListItemButton>
+      </ListItem>
     </List>
   );
 }

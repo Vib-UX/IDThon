@@ -17,6 +17,7 @@ import QRCode from "react-qr-code";
 
 import { io } from "socket.io-client";
 import { height } from "@mui/system";
+import { CircularProgress } from "@mui/material";
 
 const linkDownloadPolygonIDWalletApp =
   "https://0xpolygonid.github.io/tutorials/wallet/wallet-overview/#quick-start";
@@ -124,12 +125,34 @@ function ExperienceVerifier({
           to prove access rights
           <div>
             {isHandlingVerification && (
-              <div>
-                <p>Authenticating...</p>
-                <Spinner size={"xl"} colorScheme="purple" my={2} />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  gap: 10,
+                  height: "300px",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress color="success" />
               </div>
             )}
-            {verificationMessage}
+            {verificationMessage && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  gap: 10,
+                  height: "300px",
+                  alignItems: "center",
+                }}
+              >
+                🎉🎉You have successfully verified your experience!🎉🎉
+              </div>
+            )}
+
             {qrCodeData &&
               !isHandlingVerification &&
               !verificationCheckComplete && (
@@ -149,36 +172,36 @@ function ExperienceVerifier({
               )}
 
             {qrCodeData.body?.scope[0].query && (
-              <p
+              <div
                 style={{
                   marginTop: "1rem",
                   textAlign: "center",
                 }}
               >
                 Type: {qrCodeData.body?.scope[0].query.type}
-              </p>
+              </div>
             )}
 
             {qrCodeData.body.message && (
-              <p
+              <div
                 style={{
                   marginTop: "1rem",
                   textAlign: "center",
                 }}
               >
                 {qrCodeData.body.message}
-              </p>
+              </div>
             )}
 
             {qrCodeData.body.reason && (
-              <p
+              <div
                 style={{
                   marginTop: "1rem",
                   textAlign: "center",
                 }}
               >
                 Reason: {qrCodeData.body.reason}
-              </p>
+              </div>
             )}
           </div>
         </div>
