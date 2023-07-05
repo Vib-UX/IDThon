@@ -7,17 +7,38 @@ import Navigation from "./ui/Home";
 import { Button, FormGroup, Paper } from "@mui/material";
 import SimpleBackdrop from "./ui/Backdrop";
 import axios from "axios";
+import QRCodeModel from "./ui/QrCodeModel";
 
-const API_URL = "https://9d7c-103-183-229-61.ngrok-free.app";
+const API_URL = "http://localhost:8080";
 
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
   },
 });
-
+const _data = {
+  body: {
+    credentials: [
+      {
+        description:
+          "https://raw.githubusercontent.com/Vib-UX/IDThon/main/schemas/jsonld/bank-loan-credential-v1.jsonld#BankLoanVerificationCredential",
+        id: "9fea8357-1b54-11ee-9bfb-0242ac120006",
+      },
+    ],
+    url: "https://1243-2405-201-4024-504b-4961-d423-8480-7335.ngrok-free.app/v1/agent",
+  },
+  from: "did:polygonid:polygon:mumbai:2qPHzNFJBcpXvobxHphC1jP67BwsSC7PMUsKpXFdvA",
+  id: "2dbc7a99-6c9a-4a2b-ae64-03ba8fd94d88",
+  thid: "2dbc7a99-6c9a-4a2b-ae64-03ba8fd94d88",
+  to: "did:polygonid:polygon:mumbai:2qPuCSnY8DQ6QENGL9Ht8uWKXaWBoKrpc5duATVwkQ",
+  typ: "application/iden3comm-plain-json",
+  type: "https://iden3-communication.io/credentials/1.0/offer",
+};
 export default function FormPropsTextFields() {
   const [open, setOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isQrOpen, setIsQrOpen] = React.useState(false);
+  const [qrCode, setQrCode] = React.useState("");
   const [data, setData] = React.useState({
     did: "",
     age: "",
@@ -27,21 +48,36 @@ export default function FormPropsTextFields() {
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.post(API_URL + "/api/get-vc", {
         id: data.did,
         age: data.age,
         experience: data.workExperience,
         lastYearSalaryINR: data.salary,
       });
-      console.log(res);
+      const axiosdata = res.data;
+      const transformedData = {
+        ...axiosdata,
+        body: {
+          ...axiosdata.body,
+          url: "https://1243-2405-201-4024-504b-4961-d423-8480-7335.ngrok-free.app/v1/agent",
+        },
+      };
+      setTimeout(() => {
+        setIsLoading(false);
+        setQrCode(transformedData);
+        setIsQrOpen(true);
+      }, 5000);
     } catch (error) {
+      setIsLoading(false);
+      setQrCode(null);
       console.log(error);
     }
   };
   return (
     <ThemeProvider theme={darkTheme}>
-      <SimpleBackdrop open={open} setOpen={setOpen} />
-
+      <SimpleBackdrop open={isLoading} setOpen={setIsLoading} />
+      <QRCodeModel open={isQrOpen} qrCodeData={qrCode} />
       <CssBaseline />
       <Navigation />
       <Box

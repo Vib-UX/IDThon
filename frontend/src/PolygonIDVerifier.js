@@ -106,7 +106,11 @@ function PolygonIDVerifier({
   }
 
   return (
-    <div>
+    <div
+      style={{
+        marginTop: "2rem",
+      }}
+    >
       {qrCodeData && (
         <div>
           Scan this QR code from your{" "}
@@ -131,25 +135,51 @@ function PolygonIDVerifier({
               !verificationCheckComplete && (
                 <Center marginBottom={1}>
                   <QRCode
+                    size={400}
                     value={JSON.stringify(qrCodeData)}
                     style={{
                       backgroundColor: "white",
                       marginTop: "1rem",
                       paddingTop: "2rem",
+                      borderRadius: "20px",
                       paddingBottom: "2rem",
-                      height: "300px",
                     }}
                   />
                 </Center>
               )}
 
             {qrCodeData.body?.scope[0].query && (
-              <p>Type: {qrCodeData.body?.scope[0].query.type}</p>
+              <p
+                style={{
+                  marginTop: "1rem",
+                  textAlign: "center",
+                }}
+              >
+                Type: {qrCodeData.body?.scope[0].query.type}
+              </p>
             )}
 
-            {qrCodeData.body.message && <p>{qrCodeData.body.message}</p>}
+            {qrCodeData.body.message && (
+              <p
+                style={{
+                  marginTop: "1rem",
+                  textAlign: "center",
+                }}
+              >
+                {qrCodeData.body.message}
+              </p>
+            )}
 
-            {qrCodeData.body.reason && <p>Reason: {qrCodeData.body.reason}</p>}
+            {qrCodeData.body.reason && (
+              <p
+                style={{
+                  marginTop: "1rem",
+                  textAlign: "center",
+                }}
+              >
+                Reason: {qrCodeData.body.reason}
+              </p>
+            )}
           </div>
         </div>
       )}

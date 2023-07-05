@@ -5,8 +5,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import HorizontalLinearStepper from "./Steps";
 import SimplePaper from "./HomeCard";
+import { theme } from "@chakra-ui/react";
 
-const darkTheme = createTheme({
+export const darkTheme = createTheme({
   palette: {
     mode: "dark",
   },

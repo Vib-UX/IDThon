@@ -81,7 +81,29 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
             stepProps.completed = false;
           }
           return (
-            <Step key={label} {...stepProps}>
+            <Step
+              key={label}
+              {...stepProps}
+              sx={{
+                "& .MuiStepLabel-root .Mui-completed": {
+                  color: "secondary.dark", // circle color (COMPLETED)
+                },
+                "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
+                  {
+                    color: "grey.500", // Just text label (COMPLETED)
+                  },
+                "& .MuiStepLabel-root .Mui-active": {
+                  color: "secondary.main", // circle color (ACTIVE)
+                },
+                "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
+                  {
+                    color: "common.white", // Just text label (ACTIVE)
+                  },
+                "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
+                  fill: "black", // circle's number (ACTIVE)
+                },
+              }}
+            >
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           );
@@ -117,8 +139,15 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
                 Skip
               </Button>
             )}
-
-            <Button onClick={handleNext}>
+            <Button
+              variant="contained"
+              style={{
+                fontWeight: "normal",
+                backgroundColor: "#8d2cab",
+                color: "#fff",
+              }}
+              onClick={handleNext}
+            >
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
           </Box>
