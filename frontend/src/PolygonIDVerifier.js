@@ -140,7 +140,15 @@ function PolygonIDVerifier({
               </div>
             )}
             {verificationMessage && (
-              <div className="">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  gap: 10,
+                  alignItems: "center",
+                }}
+              >
                 🎉🎉You have successfully verified your identity!🎉🎉
               </div>
             )}

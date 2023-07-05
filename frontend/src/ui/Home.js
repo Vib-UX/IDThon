@@ -61,7 +61,7 @@ export default function Navigation() {
             }}
             onClick={() => navigate("/claim")}
           >
-            Apply for claim
+            Create a new claim
           </Button>
         </Toolbar>
       </AppBar>
