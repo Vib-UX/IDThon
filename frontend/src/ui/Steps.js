@@ -6,8 +6,14 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AgeVerifier from "./AgeVerifier";
+import SalaryVerifier from "./SalaryVerifier";
+import ExperienceVerifier from "./ExperienceVerifier";
 
-const steps = ["Verfiy your age", "Verfiy your address", "Verfiy your income"];
+const steps = [
+  "Verfiy your age",
+  "Verfiy your experience",
+  "Verfiy your income",
+];
 
 export default function HorizontalLinearStepper({ setIsVerified }) {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -122,7 +128,37 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
       ) : (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            <AgeVerifier setIsVerified={setIsVerified} />
+            {activeStep === 0 && <AgeVerifier setIsVerified={setIsVerified} />}
+            {activeStep === 1 && (
+              <ExperienceVerifier
+                publicServerURL={
+                  process.env.REACT_APP_VERIFICATION_SERVER_PUBLIC_URL
+                }
+                localServerURL={
+                  process.env.REACT_APP_VERIFICATION_SERVER_LOCAL_HOST_URL
+                }
+                credentialType={"KYCAgeCredential"}
+                issuerOrHowToLink={
+                  "https://oceans404.notion.site/How-to-get-a-Verifiable-Credential-f3d34e7c98ec4147b6b2fae79066c4f6?pvs=4"
+                }
+                onVerificationResult={setIsVerified}
+              />
+            )}
+            {activeStep === 2 && (
+              <SalaryVerifier
+                publicServerURL={
+                  process.env.REACT_APP_VERIFICATION_SERVER_PUBLIC_URL
+                }
+                localServerURL={
+                  process.env.REACT_APP_VERIFICATION_SERVER_LOCAL_HOST_URL
+                }
+                credentialType={"KYCAgeCredential"}
+                issuerOrHowToLink={
+                  "https://oceans404.notion.site/How-to-get-a-Verifiable-Credential-f3d34e7c98ec4147b6b2fae79066c4f6?pvs=4"
+                }
+                onVerificationResult={setIsVerified}
+              />
+            )}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button

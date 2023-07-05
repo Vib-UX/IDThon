@@ -33,7 +33,24 @@ export default function Navigation() {
           }}
         >
           <Typography variant="h6" color="inherit" component="div">
-            <Link to={"/"}>Get a Loan Today - Powered by Poygon Id</Link>
+            <Link
+              to={"/"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              Get a Loan Today - Powered by{" "}
+              <img
+                src="https://assets-global.website-files.com/637359c81e22b715cec245ad/63dc31f8817a4a509d7635a7_Logo.svg"
+                style={{
+                  width: "100px",
+                  height: "30px",
+                  marginLeft: "10px",
+                }}
+                alt="polygon"
+              />{" "}
+            </Link>
           </Typography>
           <Button
             variant="contained"

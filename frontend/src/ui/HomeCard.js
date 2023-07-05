@@ -18,9 +18,8 @@ export default function SimplePaper({ isVerified, setIsVerified }) {
         },
       }}
     >
-      <Paper
-        elevation={3}
-        sx={{
+      <div
+        style={{
           borderRadius: "20px",
           height: 400,
           width: 600,
@@ -48,13 +47,13 @@ export default function SimplePaper({ isVerified, setIsVerified }) {
             width: "60%",
             fontWeight: "normal",
             color: "#fff",
+            padding: "10px",
           }}
           onClick={() => setIsVerified(true)}
-          endIcon={<SendIcon />}
         >
           Start verfication
         </Button>
-      </Paper>
+      </div>
     </Box>
   );
 }
