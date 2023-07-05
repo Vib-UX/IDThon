@@ -158,20 +158,43 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
                 shrink: true,
               }}
             />
-            <Button
-              variant="contained"
+            <div
               style={{
-                backgroundColor: "#8d2cab",
-                marginTop: "20px",
-                fontWeight: "normal",
-                color: "#fff",
-              }}
-              onClick={() => {
-                setIsVerified(false);
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
               }}
             >
-              Go back
-            </Button>
+              <Button
+                variant="contained"
+                style={{
+                  backgroundColor: "#8d2cab",
+                  marginTop: "20px",
+                  fontWeight: "normal",
+                  color: "#fff",
+                }}
+                onClick={() => {
+                  setIsVerified(false);
+                }}
+              >
+                Transfer Funds
+              </Button>
+              <Button
+                variant="contained"
+                style={{
+                  backgroundColor: "#8d2cab",
+                  marginTop: "20px",
+                  fontWeight: "normal",
+                  marginLeft: "20px",
+                  color: "#fff",
+                }}
+                onClick={() => {
+                  setIsVerified(false);
+                }}
+              >
+                Connect wallet
+              </Button>
+            </div>
           </div>
         </React.Fragment>
       ) : (
