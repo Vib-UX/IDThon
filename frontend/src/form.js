@@ -56,18 +56,9 @@ export default function FormPropsTextFields() {
         lastYearSalaryINR: data.salary,
       });
       const axiosdata = res.data;
-      const transformedData = {
-        ...axiosdata,
-        body: {
-          ...axiosdata.body,
-          url: "https://1243-2405-201-4024-504b-4961-d423-8480-7335.ngrok-free.app/v1/agent",
-        },
-      };
-      setTimeout(() => {
-        setIsLoading(false);
-        setQrCode(transformedData);
-        setIsQrOpen(true);
-      }, 5000);
+      setIsLoading(false);
+      setQrCode(axiosdata);
+      setIsQrOpen(true);
     } catch (error) {
       setIsLoading(false);
       setQrCode(null);
