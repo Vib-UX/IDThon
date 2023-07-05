@@ -154,6 +154,7 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
             <div>Enter your account number</div>
             <TextField
               id="outlined-number"
+              placeholder="HDFC: 791500584504"
               InputLabelProps={{
                 shrink: true,
               }}

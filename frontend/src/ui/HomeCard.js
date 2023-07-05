@@ -58,22 +58,62 @@ export default function SimplePaper({ setIsVerified }) {
 
         <CheckboxList />
         {isVerified ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "flex-start",
-              marginTop: "20px",
-            }}
-          >
-            <div>Enter your account number</div>
-            <TextField
-              id="outlined-number"
-              InputLabelProps={{
-                shrink: true,
+          <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                marginTop: "20px",
               }}
-            />
+            >
+              <div>Enter your account number</div>
+              <TextField
+                id="outlined-number"
+                placeholder="HDFC: 791500584504"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                style={{
+                  backgroundColor: "#8d2cab",
+                  marginTop: "20px",
+                  fontWeight: "normal",
+                  color: "#fff",
+                }}
+                onClick={() => {
+                  setIsVerified(false);
+                }}
+              >
+                Transfer Funds
+              </Button>
+              <Button
+                variant="contained"
+                style={{
+                  backgroundColor: "#8d2cab",
+                  marginTop: "20px",
+                  fontWeight: "normal",
+                  marginLeft: "20px",
+                  color: "#fff",
+                }}
+                onClick={() => {
+                  setIsVerified(false);
+                }}
+              >
+                Connect wallet
+              </Button>
+            </div>
           </div>
         ) : (
           <Button
