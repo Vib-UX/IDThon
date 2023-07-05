@@ -3,14 +3,16 @@ const { auth, resolver, loaders } = require("@iden3/js-iden3-auth");
 const getRawBody = require("raw-body");
 const { Server } = require("socket.io");
 const cors = require("cors");
-const { humanReadableAuthReason, proofRequest } = require("./proofRequest");
+const { salaryReason, salaryRequest } = require("./requests/salaryRequest");
+const { ageReason, ageRequest } = require("./requests/ageRequest");
+const { expReason, expRequest } = require("./requests/experienceRequest");
 const axios = require("axios");
 require("dotenv").config();
 const moment = require("moment");
 const bodyParser = require("body-parser");
 
 // Endpoint URL and credentials for basic authentication to connect with ISSUER Node
-const apiUrl = "http://localhost:3001";
+const apiUrl = process.env.ISSUER_NODE_URL;
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
 const issuerDid =
@@ -91,10 +93,20 @@ const socketMessage = (fn, status, data) => ({
   data,
 });
 
-// GetQR returns auth request
-async function getAuthQr(req, res) {
-  const sessionId = req.query.sessionId;
+app.get("/api/get-salary-qr", (req, res) => {
+  getAuthQr(req.query.sessionId, salaryReason, salaryRequest, res);
+});
 
+app.get("/api/get-age-qr", (req, res) => {
+  getAuthQr(req.query.sessionId, ageReason, ageRequest, res);
+});
+
+app.get("/api/get-experience-qr", (req, res) => {
+  getAuthQr(req.query.sessionId, expReason, expRequest, res);
+});
+
+// GetQR returns auth request
+async function getAuthQr(sessionId, reason, request, res) {
   console.log(`getAuthQr for ${sessionId}`);
 
   io.sockets.emit(
@@ -103,26 +115,26 @@ async function getAuthQr(req, res) {
   );
 
   const uri = `${process.env.HOSTED_SERVER_URL}${apiPath.handleVerification}?sessionId=${sessionId}`;
-  // Generate request for basic authentication
-  // https://0xpolygonid.github.io/tutorials/verifier/verification-library/request-api-guide/#createauthorizationrequest
-  const request = auth.createAuthorizationRequest(
-    humanReadableAuthReason,
+  const authRequest = auth.createAuthorizationRequest(
+    reason,
     process.env.VERIFIER_DID,
     uri
   );
 
-  request.id = sessionId;
-  request.thid = sessionId;
+  authRequest.id = sessionId;
+  authRequest.thid = sessionId;
 
-  const scope = request.body.scope ?? [];
-  request.body.scope = [...scope, proofRequest];
+  const scope = authRequest.body.scope ?? [];
+  authRequest.body.scope = [...scope, request];
 
-  // store this session's auth request
-  authRequests.set(sessionId, request);
+  authRequests.set(sessionId, authRequest);
 
-  io.sockets.emit(sessionId, socketMessage("getAuthQr", STATUS.DONE, request));
+  io.sockets.emit(
+    sessionId,
+    socketMessage("getAuthQr", STATUS.DONE, authRequest)
+  );
 
-  return res.status(200).set("Content-Type", "application/json").send(request);
+  return res.status(200).json(authRequest);
 }
 
 // handleVerification verifies the proof after get-auth-qr callbacks
@@ -192,7 +204,6 @@ async function handleVerification(req, res) {
 
 async function getVC(req, res) {
   try {
-    console.log(req.body);
     const { id, age, experience, lastYearSalaryINR } = req.body;
     console.log(username, password);
     // Request BODY to Issue BankLoanCredential
@@ -202,10 +213,10 @@ async function getVC(req, res) {
       type: "BankLoanVerificationCredential",
       credentialSubject: {
         id,
-        age,
-        experience,
+        age: +age,
+        experience: +experience,
         lastUpdated: moment.utc().toDate(),
-        lastYearSalaryINR,
+        lastYearSalaryINR: +lastYearSalaryINR,
       },
       expiration: 1903357766,
     };
@@ -242,10 +253,10 @@ async function getVC(req, res) {
         error: publish,
       });
     }
-
+    jsonQrCode.data.body.url = `${process.env.ISSUER_NODE_URL}/v1/agent`;
     return res.status(200).json(jsonQrCode.data);
   } catch (error) {
-    // console.log(error.message);
+    console.log(error.message);
     console.log(error);
   }
 }
