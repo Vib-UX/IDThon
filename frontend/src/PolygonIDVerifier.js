@@ -16,6 +16,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import QRCode from "react-qr-code";
 
 import { io } from "socket.io-client";
+import { height } from "@mui/system";
 
 const linkDownloadPolygonIDWalletApp =
   "https://0xpolygonid.github.io/tutorials/wallet/wallet-overview/#quick-start";
@@ -27,7 +28,6 @@ function PolygonIDVerifier({
   publicServerURL,
   localServerURL,
 }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [sessionId, setSessionId] = useState("");
   const [qrCodeData, setQrCodeData] = useState();
   const [isHandlingVerification, setIsHandlingVerification] = useState(false);
@@ -107,78 +107,51 @@ function PolygonIDVerifier({
 
   return (
     <div>
-      {sessionId ? (
-        <Button colorScheme="purple" onClick={onOpen} margin={4}>
-          Prove access rights
-        </Button>
-      ) : (
-        <Spinner />
-      )}
-
       {qrCodeData && (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-              Scan this QR code from your{" "}
-              <a
-                href={linkDownloadPolygonIDWalletApp}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Polygon ID Wallet App
-              </a>{" "}
-              to prove access rights
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody textAlign={"center"} fontSize={"12px"}>
-              {isHandlingVerification && (
-                <div>
-                  <p>Authenticating...</p>
-                  <Spinner size={"xl"} colorScheme="purple" my={2} />
-                </div>
+        <div>
+          Scan this QR code from your{" "}
+          <a
+            href={linkDownloadPolygonIDWalletApp}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Polygon ID Wallet App
+          </a>{" "}
+          to prove access rights
+          <div>
+            {isHandlingVerification && (
+              <div>
+                <p>Authenticating...</p>
+                <Spinner size={"xl"} colorScheme="purple" my={2} />
+              </div>
+            )}
+            {verificationMessage}
+            {qrCodeData &&
+              !isHandlingVerification &&
+              !verificationCheckComplete && (
+                <Center marginBottom={1}>
+                  <QRCode
+                    value={JSON.stringify(qrCodeData)}
+                    style={{
+                      backgroundColor: "white",
+                      marginTop: "1rem",
+                      paddingTop: "2rem",
+                      paddingBottom: "2rem",
+                      height: "300px",
+                    }}
+                  />
+                </Center>
               )}
-              {verificationMessage}
-              {qrCodeData &&
-                !isHandlingVerification &&
-                !verificationCheckComplete && (
-                  <Center marginBottom={1}>
-                    <QRCode value={JSON.stringify(qrCodeData)} />
-                  </Center>
-                )}
 
-              {qrCodeData.body?.scope[0].query && (
-                <p>Type: {qrCodeData.body?.scope[0].query.type}</p>
-              )}
+            {qrCodeData.body?.scope[0].query && (
+              <p>Type: {qrCodeData.body?.scope[0].query.type}</p>
+            )}
 
-              {qrCodeData.body.message && <p>{qrCodeData.body.message}</p>}
+            {qrCodeData.body.message && <p>{qrCodeData.body.message}</p>}
 
-              {qrCodeData.body.reason && (
-                <p>Reason: {qrCodeData.body.reason}</p>
-              )}
-            </ModalBody>
-
-            <ModalFooter>
-              <Button
-                fontSize={"10px"}
-                margin={1}
-                colorScheme="purple"
-                onClick={() => openInNewTab(linkDownloadPolygonIDWalletApp)}
-              >
-                Download the Polygon ID Wallet App{" "}
-                <ExternalLinkIcon marginLeft={2} />
-              </Button>
-              <Button
-                fontSize={"10px"}
-                margin={1}
-                colorScheme="purple"
-                onClick={() => openInNewTab(issuerOrHowToLink)}
-              >
-                Get a {credentialType} VC <ExternalLinkIcon marginLeft={2} />
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+            {qrCodeData.body.reason && <p>Reason: {qrCodeData.body.reason}</p>}
+          </div>
+        </div>
       )}
     </div>
   );
