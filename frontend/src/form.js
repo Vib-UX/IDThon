@@ -9,7 +9,7 @@ import SimpleBackdrop from "./ui/Backdrop";
 import axios from "axios";
 import QRCodeModel from "./ui/QrCodeModel";
 
-const API_URL = "http://localhost:8080";
+const API_URL = process.env.REACT_APP_VERIFICATION_SERVER_PUBLIC_URL;
 
 const darkTheme = createTheme({
   palette: {
