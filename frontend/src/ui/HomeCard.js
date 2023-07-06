@@ -42,7 +42,7 @@ export default function SimplePaper({ setIsVerified }) {
               textAlign: "center",
             }}
           >
-            🎉You have are now eligible for the requested loan amount
+            🎉You are now eligible for the requested loan amount
           </Typography>
         ) : (
           <Typography
