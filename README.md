@@ -1,62 +1,35 @@
-# This is a template for creating your own VC Gated Dapp
+## - [x] **Project Video Demo Link:** [Google Drive](https://drive.google.com/file/d/1VWB7o7XoefFVgIbCCaSMMK1reIlwLTn5/view?usp=sharing)
 
-This template spins up a dapp that is 
+## Results 
 
--   ✅ Built with the popular [React JS](https://react.dev/) library
--   ✅ VC Gated with a [Polygon ID KYCAgeCredential](https://oceans404.notion.site/How-to-get-a-KYCAgeCredential-Verifiable-Credential-f3d34e7c98ec4147b6b2fae79066c4f6?pvs=4)
--   ✅ Fully connected with to all EVM chains including Polygon zkEVM Testnet and Polygon Mumbai Testnet [RainbowKit Wallet](https://www.rainbowkit.com/)
--   ✅ Beautifully styled with configurable components and icons from the [Chakra UI](https://chakra-ui.com/docs/components) library
--   ✅ Ready to interact with any smart contract thanks to working read and write examples from a Polygon zkEVM Testnet demo smart contract with [wagmi hooks](https://wagmi.sh/)
+# Project Documentation
 
-Use this template as a base to bootstrap a Polygon hackathon project **FAST** 🏃🏻‍♀️ so you can focus on your dapp's business logic & building the value layer of the internet. 🚀
+## Bank Loan Approval Web App Leveraging Polygon ID
 
-Love or hate something about this template? Let me know by [tweeting your feedback](https://twitter.com/intent/tweet?text=gm%20Steph%20I'm%20building%20with%20your%20VC%20gated%20Dapp%20template%20%400ceans404%20https%3A%2F%2Fgithub.com%2Foceans404%2Ffullstack-polygon-id-vc-gated-dapp%20%400xPolygon)
+🏦🔗 The goal of this project was to build a web application for Bank Loan Approval that leverages Polygon ID as a unique identifier on the Polygon network. The web app enables users to apply for a bank loan and utilizes the Polygon ID to verify their identity and eligibility for the loan.
 
-## Getting started with the template
+## Challenges Faced
 
-Node requirement: **node v20.2.0**
+### Custom Issuer Node Setup
+Setting up a custom issuer node for the web app presented several challenges:
+- Setting up self-hosted issuer node
+- Resolving configuration and dependency conflicts.
+- Testing and validating the issuer node's functionality. 🧩🔍🚀
 
-Here's how to check your node version. 
+### Ngrok Port Forwarding for Issuer Node Access
+Configuring ngrok for secure external access to the custom issuer node's API endpoints posed challenges:
+- Setting up ngrok to tunnel traffic to the issuer node.
+- Ensuring secure and reliable communication.
+- Managing ngrok configurations for changing issuer node setups. 🔒🌐🛠️
 
-```bash
-node -v
-```
+### Custom Schema Type Specific to Our Web App
+Designing a custom schema type specific to the web app's requirements involved challenges such as:
+- Determining necessary data attributes and structure.
+- Ensuring compatibility with the issuer node
+- Validating and testing the custom schema. 💡💻🔍
 
-If you're not running this version, you can switch your version with [nvm](https://www.freecodecamp.org/news/node-version-manager-nvm-install-guide/)
+### Verifier Multi-Requests Clubbing for Single Proof Generation
+Aggregating multiple verification requests for efficient proof generation by the verifier presented challenges like:
+- Optimizing proof generation for improved efficiency. 🔄🔐⚡
 
-#### Setup
-
-0. Visit the template repo https://github.com/oceans404/fullstack-polygon-id-vc-gated-dapp/tree/main and click "Use this template" to create a new repo
-
-1. Get a KYCAgeCredential Verifiable Credential - [follow instructions here](https://oceans404.notion.site/How-to-get-a-KYCAgeCredential-Verifiable-Credential-f3d34e7c98ec4147b6b2fae79066c4f6?pvs=4)
-
-2. Follow server setup instructions
-
-https://github.com/oceans404/fullstack-polygon-id-vc-gated-dapp/tree/main/server
-
-3. Follow frontend setup instructions
-
-https://github.com/oceans404/fullstack-polygon-id-vc-gated-dapp/tree/main/frontend
-
-## Default localhosts
-
-- Frontend: localhost:3000
-- Server: localhost:8080
-
-## Here's the fullstack vc gated dapp this template spins up
-
-Welcome page: In order to see the dapp, you need to prove your access rights. Click the "Prove access rights" button
-
-<img width="1135" alt="Screenshot 2023-06-23 at 10 51 19 AM" src="https://github.com/oceans404/fullstack-polygon-id-vc-gated-dapp/assets/91382964/65c486ea-16f5-4ad7-9da5-97492bc83b7e">
-
-A modal with a QR code appears. Scan this QR code with your Polygon ID mobile app. Note: you must hold a KYCAgeCredential with a birthday before this year. [Here's how to get the KYCAgeCredential VC](https://oceans404.notion.site/How-to-get-a-Verifiable-Credential-f3d34e7c98ec4147b6b2fae79066c4f6?pvs=4)
-
-<img width="1134" alt="Screenshot 2023-06-23 at 10 51 30 AM" src="https://github.com/oceans404/fullstack-polygon-id-vc-gated-dapp/assets/91382964/c570c4c6-c549-4dea-9f4b-611bb54bbe78">
-
-If you successfully complete age verification, you'll see a success message, then be redirected to the dapp.
-
-<img width="1133" alt="Screenshot 2023-06-23 at 10 51 57 AM" src="https://github.com/oceans404/fullstack-polygon-id-vc-gated-dapp/assets/91382964/f3d12060-d17e-4c55-b4da-43c6fe13c7eb">
-
-This is the Dapp page that you see once you've proved access rights. It's set up with a RainbowKit wallet connector and has read and write to smart contract examples.
-
-<img width="1134" alt="Screenshot 2023-06-23 at 10 52 19 AM" src="https://github.com/oceans404/fullstack-polygon-id-vc-gated-dapp/assets/91382964/7e89b2b8-fb78-42df-9bc1-5938198af3a8">
+These challenges were overcome through research, consultation, and thorough testing and validation processes. 📚🤝✅
