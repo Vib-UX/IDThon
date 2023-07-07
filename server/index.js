@@ -100,6 +100,10 @@ const socketMessage = (fn, status, data) => ({
   data,
 });
 
+app.get("/api/get-basicAuth", (req, res) => {
+  getBasicAuthQr(req.query.sessionId, res);
+});
+
 app.get("/api/get-salary-qr", (req, res) => {
   getAuthQr(req.query.sessionId, salaryReason, salaryRequest, res);
 });
@@ -111,6 +115,39 @@ app.get("/api/get-age-qr", (req, res) => {
 app.get("/api/get-experience-qr", (req, res) => {
   getAuthQr(req.query.sessionId, expReason, expRequest, res);
 });
+
+async function getBasicAuthQr(sessionId, res) {
+  console.log(`getBasicAuthQr for ${sessionId}`);
+
+  io.sockets.emit(
+    sessionId,
+    socketMessage("getBasicAuthQr", STATUS.IN_PROGRESS, sessionId)
+  );
+
+  const messageToSign = "Bank Loan Web App wants to verify your DID";
+
+  const uri = `${process.env.HOSTED_SERVER_URL}${apiPath.handleVerification}?sessionId=${sessionId}`;
+  const authRequest = auth.createAuthorizationRequest(
+    "Authenticating Polygon-DID",
+    process.env.VERIFIER_DID,
+    uri
+  );
+
+  authRequest.id = sessionId;
+  authRequest.thid = sessionId;
+
+  const scope = authRequest.body.scope ?? [];
+  authRequest.body.scope = [...scope];
+
+  authRequests.set(sessionId, authRequest);
+
+  io.sockets.emit(
+    sessionId,
+    socketMessage("getBasicAuthQr", STATUS.DONE, authRequest)
+  );
+
+  return res.status(200).json(authRequest);
+}
 
 // GetQR returns auth request
 async function getAuthQr(sessionId, reason, request, res) {
