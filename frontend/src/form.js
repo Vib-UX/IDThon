@@ -89,6 +89,7 @@ export default function FormPropsTextFields() {
               id="outlined-number"
               label="Enter DID"
               value={data.did}
+              disabled
               onChange={(e) => setData({ ...data, did: e.target.value })}
               InputLabelProps={{
                 shrink: true,
