@@ -144,7 +144,7 @@ export default function HorizontalLinearStepper({ setIsVerified }) {
                 fontSize: "20px",
               }}
             >
-              🎉You have are now eligible for the requested loan amount
+              🎉You are now eligible for the requested loan amount
             </h1>
             <div
               style={{
