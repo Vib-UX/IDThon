@@ -127,17 +127,15 @@ async function getBasicAuthQr(sessionId, res) {
   const messageToSign = "Bank Loan Web App wants to verify your DID";
 
   const uri = `${process.env.HOSTED_SERVER_URL}${apiPath.handleVerification}?sessionId=${sessionId}`;
-  const authRequest = auth.createAuthorizationRequest(
+  const authRequest = auth.createAuthorizationRequestWithMessage(
     "Authenticating Polygon-DID",
+    messageToSign,
     process.env.VERIFIER_DID,
     uri
   );
 
   authRequest.id = sessionId;
   authRequest.thid = sessionId;
-
-  const scope = authRequest.body.scope ?? [];
-  authRequest.body.scope = [...scope];
 
   authRequests.set(sessionId, authRequest);
 
