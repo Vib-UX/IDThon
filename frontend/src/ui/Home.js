@@ -9,11 +9,28 @@ import SendIcon from "@mui/icons-material/Send";
 import { Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import SimpleBackdrop from "./Backdrop";
+import AgeVerifier from "./AgeVerifier";
+import LoginVerifier from "./LoginModal";
+import useGlobalStore from "../store";
 
 export default function Navigation() {
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <LoginVerifier
+        publicServerURL={process.env.REACT_APP_VERIFICATION_SERVER_PUBLIC_URL}
+        localServerURL={
+          process.env.REACT_APP_VERIFICATION_SERVER_LOCAL_HOST_URL
+        }
+        open={open}
+        setOpen={setOpen}
+        onVerificationResult={() => {
+          console.log("verified");
+          navigate("/claim");
+        }}
+      />
       <AppBar
         position="static"
         style={{
@@ -59,7 +76,13 @@ export default function Navigation() {
               fontWeight: "normal",
               color: "#fff",
             }}
-            onClick={() => navigate("/claim")}
+            onClick={() => {
+              if (localStorage.getItem("user_did")) {
+                navigate("/claim");
+              } else {
+                setOpen(true);
+              }
+            }}
           >
             Create a new claim
           </Button>

@@ -8,6 +8,7 @@ import { Button, FormGroup, Paper } from "@mui/material";
 import SimpleBackdrop from "./ui/Backdrop";
 import axios from "axios";
 import QRCodeModel from "./ui/QrCodeModel";
+import useGlobalStore from "./store";
 
 const API_URL = process.env.REACT_APP_VERIFICATION_SERVER_PUBLIC_URL;
 
@@ -16,31 +17,17 @@ const darkTheme = createTheme({
     mode: "dark",
   },
 });
-const _data = {
-  body: {
-    credentials: [
-      {
-        description:
-          "https://raw.githubusercontent.com/Vib-UX/IDThon/main/schemas/jsonld/bank-loan-credential-v1.jsonld#BankLoanVerificationCredential",
-        id: "9fea8357-1b54-11ee-9bfb-0242ac120006",
-      },
-    ],
-    url: "https://1243-2405-201-4024-504b-4961-d423-8480-7335.ngrok-free.app/v1/agent",
-  },
-  from: "did:polygonid:polygon:mumbai:2qPHzNFJBcpXvobxHphC1jP67BwsSC7PMUsKpXFdvA",
-  id: "2dbc7a99-6c9a-4a2b-ae64-03ba8fd94d88",
-  thid: "2dbc7a99-6c9a-4a2b-ae64-03ba8fd94d88",
-  to: "did:polygonid:polygon:mumbai:2qPuCSnY8DQ6QENGL9Ht8uWKXaWBoKrpc5duATVwkQ",
-  typ: "application/iden3comm-plain-json",
-  type: "https://iden3-communication.io/credentials/1.0/offer",
-};
+
 export default function FormPropsTextFields() {
   const [open, setOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isQrOpen, setIsQrOpen] = React.useState(false);
   const [qrCode, setQrCode] = React.useState("");
+  const { user_did } = useGlobalStore();
   const [data, setData] = React.useState({
-    did: "",
+    did: localStorage.getItem("user_did")
+      ? localStorage.getItem("user_did")
+      : user_did,
     age: "",
     workExperience: "",
     salary: "",
@@ -62,6 +49,7 @@ export default function FormPropsTextFields() {
     } catch (error) {
       setIsLoading(false);
       setQrCode(null);
+      setIsQrOpen(false);
       console.log(error);
     }
   };
@@ -145,7 +133,7 @@ export default function FormPropsTextFields() {
             />
             <TextField
               id="outlined-number"
-              label="Enter salary in USD"
+              label="Enter salary in INR"
               type="number"
               value={data.salary}
               onChange={(e) => setData({ ...data, salary: e.target.value })}

@@ -13,7 +13,24 @@ export default function SimpleBackdrop({ open, setOpen }) {
       open={open}
       onClick={handleClose}
     >
-      <CircularProgress color="inherit" />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress color="inherit" />
+        <p
+          style={{
+            textAlign: "center",
+            marginTop: "10px",
+          }}
+        >
+          Generating your QR code, please wait while we verify your identity...
+        </p>
+      </div>
     </Backdrop>
   );
 }
